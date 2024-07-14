@@ -1,0 +1,26 @@
+//its easy maintain a separate arrays of the rows and columns and when one get the value that is not zero in that respective one then make it zero in that
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+       int n=matrix.size();
+       int m=matrix[0].size();
+       vector<int> m1(n,0);
+       vector<int> m2(m,0);
+       for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(matrix[i][j]==0){
+                m1[i]=1;
+                m2[j]=1;
+            }
+        }
+       }
+       for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(m1[i]==1 || m2[j]==1){
+                matrix[i][j]=0;
+            }
+        }
+       }
+       
+    }
+};
