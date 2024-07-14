@@ -1,0 +1,7 @@
+//can also do by the pointers method
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        return sort(nums.begin(),nums.end());
+    }
+};
