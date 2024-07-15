@@ -1,0 +1,22 @@
+class Solution {
+public:
+    void merge(vector<int>& num1, int m, vector<int>& num2, int n) {
+        int i = m - 1;        // Last element of initial part of num1
+        int j = n - 1;        // Last element of num2
+        int k = m + n - 1;    // Last position in num1
+
+        while (i >= 0 && j >= 0) {
+            if (num1[i] > num2[j]) {
+                num1[k--] = num1[i--];
+            } else {
+                num1[k--] = num2[j--];
+            }
+        }
+        
+        // If there are remaining elements in num2, add them
+        while (j >= 0) {
+            num1[k--] = num2[j--];
+        }
+    }
+};
+
