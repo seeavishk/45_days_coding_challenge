@@ -1,0 +1,29 @@
+//pick any of the cards and do the thing by picking up the value consecutively from any of the plac eand find the max points of the card without sorting
+//l se ghtate jaao aur right me bdate jaao...example lsum would take 4 then remove one from left and add one inthe right side and move it to left..
+class Solution {
+public:
+    int maxScore(vector<int>& cardPoints, int k) {
+        if (k <= 0) return -1; // Edge case: k should be greater than 0
+        if (cardPoints.size() == 0) return -1; // Edge case: cardPoints should not be empty
+
+        int n = cardPoints.size();
+        int lsum = 0;
+        int rsum = 0;
+        int maxSum = 0;
+
+        // Calculate the initial sum of the first k elements
+        for (int i = 0; i < k; i++) {
+            lsum += cardPoints[i];
+        }
+        maxSum = lsum;
+
+        // Sliding window: move one card from the end to the start
+        for (int i = 0; i < k; i++) {
+            lsum -= cardPoints[k - 1 - i];
+            rsum += cardPoints[n - 1 - i];
+            maxSum = max(maxSum, lsum + rsum);
+        }
+
+        return maxSum;
+    }
+};
