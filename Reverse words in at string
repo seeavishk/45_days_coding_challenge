@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        int n = s.length(); // Length of the input string
+        string result; // Resultant string to store the reversed words
+        int i = 0; // Index to iterate through the string
+
+        while (i < n) {
+            // Skip leading spaces
+            while (i < n && s[i] == ' ') i++;
+
+            // If we've reached the end of the string, break out of the loop
+            if (i >= n) break;
+
+            // Find the end of the current word
+            int j = i + 1;
+            while (j < n && s[j] != ' ') j++;
+
+            // Extract the word from the string
+            string sub = s.substr(i, j - i);
+
+            // If result is empty, initialize it with the first word
+            // Otherwise, append the current word at the beginning, followed by a space
+            if (result.length() == 0) result = sub;
+            else result = sub + " " + result;
+
+            // Move to the next word
+            i = j + 1;
+        }
+
+        return result; // Return the resultant reversed string
+    }
+};
