@@ -1,0 +1,43 @@
+#include <vector>
+#include <unordered_map>
+#include <stack>
+
+using namespace std;
+
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        // Edge case: if either nums1 or nums2 is empty, return an empty vector
+        if (nums1.empty() || nums2.empty()) return {};
+
+        // Map to store the next greater element for each element in nums2
+        unordered_map<int, int> nextGreaterMap;
+        stack<int> s;
+
+        // Traverse nums2 from right to left
+        for (int num : nums2) {
+            // Pop elements from the stack until we find a greater element
+            while (!s.empty() && s.top() <= num) {
+                s.pop();
+            }
+            
+            // If the stack is not empty, the top element is the next greater element for the current num
+            if (!s.empty()) {
+                nextGreaterMap[num] = s.top();
+            } else {
+                nextGreaterMap[num] = -1; // No greater element
+            }
+
+            // Push the current num onto the stack
+            s.push(num);
+        }
+
+        // Prepare the result vector based on nums1
+        vector<int> result;
+        for (int num : nums1) {
+            result.push_back(nextGreaterMap[num]);
+        }
+
+        return result;
+    }
+};
