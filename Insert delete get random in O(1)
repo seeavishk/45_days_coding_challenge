@@ -1,0 +1,46 @@
+//to remvoe using the map replace the element to be removed by the last and then delte it from the map..
+//if no replacement then it would take the value of 0(n) 
+#define pb push_back  
+class RandomizedCollection {  
+public:  
+    vector<int> arr;  
+    unordered_map<int, unordered_set<int>> map;  
+    
+    RandomizedCollection() {  
+    }  
+    
+    bool insert(int val) {  
+        arr.pb(val);  
+        map[val].insert(arr.size() - 1);  
+        return map[val].size() == 1;  
+    }  
+    
+    bool remove(int val) {  
+        if(map.find(val) == map.end() || map[val].size() == 0)  
+            return false;  
+        
+        int idx_to_remove = *(map[val].begin());  
+        map[val].erase(idx_to_remove);  
+        
+        int last_element = arr.back();  
+        arr[idx_to_remove] = last_element;  
+        
+        map[last_element].insert(idx_to_remove);  
+        map[last_element].erase(arr.size() - 1);  
+        
+        arr.pop_back();  
+        return true;  
+    }  
+    
+    int getRandom() {  
+        return arr[rand() % arr.size()];  
+    }  
+};
+
+/**
+ * Your RandomizedCollection object will be instantiated and called as such:
+ * RandomizedCollection* obj = new RandomizedCollection();
+ * bool param_1 = obj->insert(val);
+ * bool param_2 = obj->remove(val);
+ * int param_3 = obj->getRandom();
+ */
