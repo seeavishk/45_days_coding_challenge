@@ -1,0 +1,45 @@
+class Solution {  
+public:  
+    int calculate(string s) {  
+        stack<int> st; // Stack to keep track of numbers and intermediate results
+        char sign = '+'; // Initialize the current sign to '+'
+        int num = 0; // Variable to store the current number
+        int res = 0; // Result variable
+        
+        for (int i = 0; i < s.length(); i++) {
+            char c = s[i];
+            
+            // If the character is a digit, build the current number
+            if (isdigit(c)) {
+                num = num * 10 + (c - '0');
+            }
+            
+            // If the character is an operator or the end of the string, process the current number
+            if (!isdigit(c) && c != ' ' || i == s.length() - 1) {
+                if (sign == '+') {
+                    st.push(num); // Push the current number onto the stack
+                } else if (sign == '-') {
+                    st.push(-num); // Push the negative of the current number onto the stack
+                } else if (sign == '*') {
+                    int temp = st.top() * num; // Multiply the top of the stack with the current number
+                    st.pop();
+                    st.push(temp);
+                } else if (sign == '/') {
+                    int temp = st.top() / num; // Divide the top of the stack by the current number
+                    st.pop();
+                    st.push(temp);
+                }
+                sign = c; // Update the sign to the current operator
+                num = 0; // Reset the current number to 0
+            }
+        }
+        
+        // Sum up all the numbers in the stack to get the final result
+        while (!st.empty()) {
+            res += st.top();
+            st.pop();
+        }
+        
+        return res;  
+    }  
+};
