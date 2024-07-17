@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int findMaxValueOfEquation(vector<vector<int>>& points, int k) {
+        // A priority queue to store pairs of (y - x, x) in decreasing order of y - x
+        priority_queue<pair<int, int>> pq;
+        int maxVal = INT_MIN;
+
+        // Iterate over each point in the points vector
+        for (const auto& point : points) {
+            int x = point[0];  
+            int y = point[1];  
+
+            // Remove elements from the priority queue if their x values are out of range
+            while (!pq.empty() && x - pq.top().second > k) {  
+                pq.pop();  
+            }
+
+            // If the priority queue is not empty, calculate the current value of the equation
+            if (!pq.empty()) {  
+                int currVal = pq.top().first + y + x;  
+                maxVal = max(maxVal, currVal);  
+            }
+
+            // Add the current point to the priority queue with (y - x, x)
+            pq.push({y - x, x});  
+        }
+
+        return maxVal;
+    }
+};
