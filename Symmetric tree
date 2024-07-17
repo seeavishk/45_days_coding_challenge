@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    // Helper function to check if two trees are mirror images of each other
+    bool isMirror(TreeNode* left, TreeNode* right) {
+        // If both nodes are null, they are mirror images (both are empty)
+        if (!left && !right) return true;
+
+        // If one of the nodes is null and the other is not, they are not mirror images
+        if (!left || !right) return false;
+
+        // Check if the current nodes' values are equal and recursively check their children
+        // The left child's left subtree should be a mirror of the right child's right subtree
+        // and the left child's right subtree should be a mirror of the right child's left subtree
+        return (left->val == right->val) &&
+               isMirror(left->left, right->right) &&
+               isMirror(left->right, right->left);
+    }
+
+    // Function to check if the binary tree is symmetric around its center
+    bool isSymmetric(TreeNode* root) {
+        // An empty tree is symmetric
+        if (!root) return true;
+
+        // Use the helper function to check if the left and right subtrees are mirrors of each other
+        return isMirror(root->left, root->right);
+    }
+};
