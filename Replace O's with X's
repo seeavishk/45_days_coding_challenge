@@ -1,0 +1,95 @@
+//{ Driver Code Starts
+// Initial Template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+// User function Template for C++
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+private:
+    void bfs(int row, int col, vector<vector<int>>& vis, vector<vector<char>>& mat) {
+        int n = mat.size();
+        int m = mat[0].size();
+        queue<pair<int, int>> q;
+        q.push({row, col});
+        vis[row][col] = 1;
+
+        // Direction vectors for moving up, down, left, right
+        vector<int> dRow = {-1, 1, 0, 0};
+        vector<int> dCol = {0, 0, -1, 1};
+
+        while (!q.empty()) {
+            int curRow = q.front().first;
+            int curCol = q.front().second;
+            q.pop();
+
+            for (int i = 0; i < 4; i++) {
+                int newRow = curRow + dRow[i];
+                int newCol = curCol + dCol[i];
+
+                if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && 
+                    !vis[newRow][newCol] && mat[newRow][newCol] == 'O') {
+                    vis[newRow][newCol] = 1;
+                    q.push({newRow, newCol});
+                }
+            }
+        }
+    }
+
+public:
+    vector<vector<char>> fill(int n, int m, vector<vector<char>> mat) {
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
+        // Traverse the boundary cells
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if ((i == 0 || i == n-1 || j == 0 || j == m-1) && mat[i][j] == 'O' && !vis[i][j]) {
+                    bfs(i, j, vis, mat);
+                }
+            }
+        }
+
+        // Replace all unvisited 'O's with 'X' and visited back to 'O'
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 'O' && !vis[i][j]) {
+                    mat[i][j] = 'X';
+                }
+            }
+        }
+
+        return mat;
+    }
+};
+
+
+
+//{ Driver Code Starts.
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n, m;
+        cin>>n>>m;
+        vector<vector<char>> mat(n, vector<char>(m, '.'));
+        for(int i = 0;i < n;i++)
+            for(int j=0; j<m; j++)
+                cin>>mat[i][j];
+        
+        Solution ob;
+        vector<vector<char>> ans = ob.fill(n, m, mat);
+        for(int i = 0;i < n;i++) {
+            for(int j = 0;j < m;j++) {
+                cout<<ans[i][j]<<" ";
+            }
+            cout<<"\n";
+        }
+    }
+    return 0;
+}
+// } Driver Code Ends
