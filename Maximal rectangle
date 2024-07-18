@@ -1,0 +1,80 @@
+class Solution {
+    vector<int> nextSmallerElement(vector<int> arr, int n) {
+        stack<int> s;
+        s.push(-1); // Initialize the stack with -1, which serves as a sentinel value.
+        vector<int> ans(n); // To store the indices of the next smaller elements.
+
+        for (int i = n - 1; i >= 0; i--) {
+            int curr = arr[i];
+            while (s.top() != -1 && arr[s.top()] >= curr) {
+                s.pop();
+            }
+            // The top of the stack is the index of the next smaller element.
+            ans[i] = s.top();
+            s.push(i); // Push the current index onto the stack.
+        }
+        return ans;
+    }
+
+    vector<int> prevSmallerElement(vector<int> arr, int n) {
+        stack<int> s;
+        s.push(-1); // Initialize the stack with -1, which serves as a sentinel value.
+        vector<int> ans(n); // To store the indices of the previous smaller elements.
+
+        for (int i = 0; i < n; i++) {
+            int curr = arr[i];
+            while (s.top() != -1 && arr[s.top()] >= curr) {
+                s.pop();
+            }
+            // The top of the stack is the index of the previous smaller element.
+            ans[i] = s.top();
+            s.push(i); // Push the current index onto the stack.
+        }
+        return ans;
+    }
+
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int n = heights.size();
+
+        vector<int> next(n);
+        next = nextSmallerElement(heights, n);
+
+        vector<int> prev(n);
+        prev = prevSmallerElement(heights, n);
+
+        int area = INT_MIN; // Initialize the maximum area.
+
+        for (int i = 0; i < n; i++) {
+            int l = heights[i];
+
+            if (next[i] == -1) {
+                next[i] = n; // If there is no next smaller element, set it to the size of the array.
+            }
+            int b = next[i] - prev[i] - 1; // Calculate the width of the rectangle.
+            int newArea = l * b; // Calculate the area of the rectangle.
+            area = max(area, newArea); // Update the maximum area.
+        }
+        return area;
+    }
+
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if (matrix.empty()) return 0; // If the matrix is empty, return 0.
+
+        int maxi = INT_MIN; // Initialize the maximum area.
+        vector<int> histogram(matrix[0].size(), 0); // Initialize the histogram based on the number of columns.
+
+        for (int i = 0; i < matrix.size(); i++) {
+            for (int j = 0; j < histogram.size(); j++) {
+                if (matrix[i][j] == '1') {
+                    histogram[j]++; // Increment the histogram column height if the current cell is '1'.
+                } else {
+                    histogram[j] = 0; // Reset the histogram column height if the current cell is '0'.
+                }
+            }
+            maxi = max(maxi, largestRectangleArea(histogram)); // Update the maximum area.
+        }
+        return maxi;
+    }
+};
