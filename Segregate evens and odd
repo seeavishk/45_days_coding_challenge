@@ -1,0 +1,102 @@
+//{ Driver Code Starts
+//Initial template for C++
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+    int data;
+    struct Node* next;
+    
+    Node(int x){
+        data = x;
+        next = NULL;
+    }
+};
+void printList(Node* node) 
+{ 
+    while (node != NULL) { 
+        cout << node->data <<" "; 
+        node = node->next; 
+    }  
+    cout<<"\n";
+} 
+
+
+// } Driver Code Ends
+//User function template for C++
+
+/*
+struct Node
+{
+    int data;
+    struct Node* next;
+    
+    Node(int x){
+        data = x;
+        next = NULL;
+    }
+};
+*/
+class Solution{
+public:
+Node* divide(int N, Node* head) {
+    if (head == nullptr) return nullptr; // Handle empty list
+
+    // Create dummy nodes for even and odd lists
+    Node dummyEven(0), dummyOdd(0);
+    Node* evenTail = &dummyEven; // Tail of the even list
+    Node* oddTail = &dummyOdd;   // Tail of the odd list
+
+    // Traverse the list and partition nodes
+    Node* current = head;
+    while (current != nullptr) {
+        if (current->val % 2 == 0) { // Even number
+            evenTail->next = current;
+            evenTail = evenTail->next;
+        } else { // Odd number
+            oddTail->next = current;
+            oddTail = oddTail->next;
+        }
+        current = current->next;
+    }
+
+    // Terminate the odd list
+    oddTail->next = nullptr;
+    // Connect the end of the even list to the start of the odd list
+    evenTail->next = dummyOdd.next;
+
+    // Return the head of the modified list
+    return dummyEven.next;
+}
+};
+
+//{ Driver Code Starts.
+
+int main() {
+    //code
+    int t;
+    cin>>t;
+    while(t--){
+        int N;
+        cin>>N;
+        int data;
+        cin>>data;
+        struct Node *head = new Node(data);
+        struct Node *tail = head;
+        for (int i = 0; i < N-1; ++i)
+        {
+            cin>>data;
+            tail->next = new Node(data);
+            tail = tail->next;
+        }
+        
+        Solution ob;
+        Node *ans = ob.divide(N, head);
+        printList(ans); 
+    }
+    return 0;
+}
+
+// } Driver Code Ends
