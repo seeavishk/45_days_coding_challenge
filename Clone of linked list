@@ -1,0 +1,51 @@
+class Solution {
+private:
+    // Step 1: Insert a copy node in between each original node
+    void insertCopyInBetween(Node* head) {
+        Node* temp = head;
+        while (temp != NULL) {
+            Node* nextElement = temp->next;
+            Node* copy = new Node(temp->val); // Create a copy of the current node
+            copy->next = nextElement;         // Point the copy's next to the current node's next
+            temp->next = copy;                // Point the current node's next to the copy
+            temp = nextElement;               // Move to the next original node
+        }
+    }
+
+    // Step 2: Connect the random pointers of the copied nodes
+    void connectRandomPointers(Node* head) {
+        Node* temp = head;
+        while (temp != NULL) {
+            Node* copyNode = temp->next;      // Get the copy node
+            if (temp->random) {
+                copyNode->random = temp->random->next; // Point the copy's random to the original's random's copy
+            } else {
+                copyNode->random = NULL;      // If the original's random is null, the copy's random should also be null
+            }
+            temp = temp->next->next;          // Move to the next original node
+        }
+    }
+
+    // Step 3: Separate the copied nodes from the original list
+    Node* getCopy(Node* head) {
+        Node* temp = head;
+        Node* dummy = new Node(-1);            // Create a dummy node to help with the new list
+        Node* res = dummy;                     // Pointer to build the new list
+        while (temp != NULL) {
+            res->next = temp->next;            // Point res's next to the copy node
+            res = res->next;                   // Move res to the next position
+            temp->next = temp->next->next;     // Restore the original list by skipping the copy node
+            temp = temp->next;                 // Move to the next original node
+        }
+        return dummy->next;                    // Return the head of the copied list
+    }
+
+public:
+    // Main function to copy the list with random pointer
+    Node* copyRandomList(Node* head) {
+        if (!head) return nullptr;             // If the list is empty, return null
+        insertCopyInBetween(head);             // Step 1: Insert copy nodes
+        connectRandomPointers(head);           // Step 2: Connect random pointers
+        return getCopy(head);                  // Step 3: Separate the copied list and return
+    }
+};
