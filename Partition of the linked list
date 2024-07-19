@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        // Create dummy nodes to start the new lists
+        ListNode dummy1(0); // List for values < x
+        ListNode dummy2(0); // List for values >= x
+
+        // Pointers to help with the creation of the new lists
+        ListNode* less = &dummy1;
+        ListNode* greater = &dummy2;
+
+        // Traverse the original list and partition it
+        while (head != nullptr) {
+            if (head->val < x) {
+                less->next = head; // Add to 'less' list
+                less = less->next;
+            } else {
+                greater->next = head; // Add to 'greater' list
+                greater = greater->next;
+            }
+            head = head->next; // Move to the next node
+        }
+
+        // Terminate the 'greater' list
+        greater->next = nullptr;
+
+        // Connect the end of the 'less' list to the start of the 'greater' list
+        less->next = dummy2.next;
+
+        return dummy1.next; // Return the head of the modified list
+    }
+};
