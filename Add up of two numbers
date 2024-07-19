@@ -1,0 +1,61 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    // Helper function to reverse a linked list
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        while (curr != nullptr) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+    
+    // Function to add two numbers represented by linked lists
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // Reverse both lists
+        l1 = reverseList(l1);
+        l2 = reverseList(l2);
+        
+        ListNode* dummy = new ListNode();  // Dummy node to simplify result list construction
+        ListNode* temp = dummy;            // Pointer to construct the result list
+        int carry = 0;                     // Initialize carry to 0
+        
+        // Loop until both lists are exhausted and no carry remains
+        while (l1 != nullptr || l2 != nullptr || carry) {
+            int sum = 0;                   // Initialize sum for the current place value
+            
+            if (l1 != nullptr) {           // Add l1's value if l1 is not exhausted
+                sum += l1->val;
+                l1 = l1->next;             // Move to the next node in l1
+            }
+            
+            if (l2 != nullptr) {           // Add l2's value if l2 is not exhausted
+                sum += l2->val;
+                l2 = l2->next;             // Move to the next node in l2
+            }
+            
+            sum += carry;                  // Add any carry from the previous place value
+            carry = sum / 10;              // Calculate new carry
+            ListNode* node = new ListNode(sum % 10); // Create a new node with the digit value of sum
+            temp->next = node;             // Append the new node to the result list
+            temp = temp->next;             // Move to the next position in the result list
+        }
+        
+        // Reverse the result list to get the correct order
+        return reverseList(dummy->next);
+    }
+};
