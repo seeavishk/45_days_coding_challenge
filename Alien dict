@@ -1,0 +1,71 @@
+private:  
+      vector<int> adj[26]; // Adjacency list for storing the graph (adjust to 26 for lowercase letters)  
+
+    // Function for topological sorting  
+    vector<int> topoSort(int K, vector<int> adj[]) {  
+        vector<int> indegree(26, 0); // Initialize indegree array for each character  
+
+        // Calculate indegrees of each node  
+        for (int i = 0; i < 26; i++) {  
+            for (auto it : adj[i]) {  
+                indegree[it]++; // Counting incoming edges to each node  
+            }  
+        }  
+
+        queue<int> q; // Queue to process nodes with no incoming edges  
+        for (int i = 0; i < 26; i++) {  
+            if (indegree[i] == 0) {  
+                q.push(i); // Push all nodes with no incoming edges  
+            }  
+        }  
+
+        vector<int> topo; // To store the topological order  
+
+        // Process nodes  
+        while (!q.empty()) {  
+            int node = q.front();  
+            q.pop();  
+            topo.push_back(node); // Include node in topological order  
+
+            // For each adjacent node, decrease indegree and add to queue if hits zero  
+            for (auto it : adj[node]) {  
+                indegree[it]--;  
+                if (indegree[it] == 0) {  
+                    q.push(it);  
+                }  
+            }  
+        }  
+
+        return topo; // Return the topological order  
+    }  
+
+    public:  
+    // Function to find the order of characters in the alien dictionary  
+    string findOrder(string dict[], int N, int K) {  
+        // Build the directed graph based on character order from the dictionary  
+        vector<int> adj[26]; // Adjust to 26 for the lowercase English alphabet  
+        for(int i = 0; i < N - 1; i++){  
+            string s1 = dict[i];  
+            string s2 = dict[i+1];  
+            int len = min(s1.size(), s2.size()); // Find the minimum length of the two strings  
+
+            // Find the first non-matching character to determine ordering  
+            for(int ptr = 0; ptr < len; ptr++){  
+                if(s1[ptr] != s2[ptr]){  
+                    adj[s1[ptr] - 'a'].push_back(s2[ptr] - 'a'); // Create a directed graph edge (s1[ptr] -> s2[ptr])  
+                    break; // Only the first non-matching character is needed  
+                }  
+            }  
+        }  
+
+        // Perform topological sort on the constructed graph  
+        vector<int> topo = topoSort(K, adj);  
+        
+        // Construct the final order string  
+        string ans = "";  
+        for(auto it : topo){  
+            ans += char(it + 'a'); // Convert indices back to characters  
+        }  
+        
+        return ans; // Return the constructed character order  
+    }  
